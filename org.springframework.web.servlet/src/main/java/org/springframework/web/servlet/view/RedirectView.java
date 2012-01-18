@@ -101,6 +101,8 @@ public class RedirectView extends AbstractUrlBasedView implements SmartView {
 	private boolean http10Compatible = true;
 
 	private boolean exposeModelAttributes = true;
+	
+	private boolean replaceUriTemplateVariables = false;
 
 	private String encodingScheme;
 
@@ -206,6 +208,15 @@ public class RedirectView extends AbstractUrlBasedView implements SmartView {
 	public void setExposeModelAttributes(final boolean exposeModelAttributes) {
 		this.exposeModelAttributes = exposeModelAttributes;
 	}
+	
+	/**
+	 * Set the <code>replaceUriTemplateVariables</code> flag which denotes whether
+	 * or not Uri Template replacement should happen with model Variables.
+	 * <p>Defaults to <code>true</code>.
+	 */
+	public void setReplaceUriTemplateVariables(final boolean replaceUriTemplateVariables) {
+		this.replaceUriTemplateVariables = replaceUriTemplateVariables;
+	}
 
 	/**
 	 * Set the encoding scheme for this view.
@@ -288,7 +299,7 @@ public class RedirectView extends AbstractUrlBasedView implements SmartView {
 			enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
 		}
 
-		if (StringUtils.hasText(targetUrl)) {
+		if (this.replaceUriTemplateVariables && StringUtils.hasText(targetUrl)) {
 			Map<String, String> variables = getCurrentRequestUriVariables(request);
 			targetUrl = replaceUriTemplateVariables(targetUrl.toString(), model, variables, enc);
 		}
